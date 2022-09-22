@@ -1,0 +1,35 @@
+name: Trivy Hub Docker Security Scan
+# Controls when the action will run.
+# Triggers the workflow on push or pull request
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Trivy Scan - Unknown, Low and Medium Severity
+        uses: aquasecurity/trivy-action@0.7.1
+        with:
+          # image reference
+          image-ref: chrisnt5/ng-devops:1.1.8
+          # exit code when vulnerabilities were found
+          exit-code: 0
+          # severities of vulnerabilities to be displayed
+          # severity: UNKNOWN,LOW,MEDIUM
+          severity: LOW,MEDIUM,HIGH,CRITICAL
+          
+      - name: Trivy Scan - High and Critical Severity
+        uses: aquasecurity/trivy-action@0.7.1
+        with:
+          image-ref: chrisnt5/hello-go:1.0.2
+          exit-code: 1
+          severity: LOW,MEDIUM,HIGH,CRITICAL
